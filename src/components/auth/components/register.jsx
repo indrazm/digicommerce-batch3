@@ -12,7 +12,7 @@ export const Register = () => {
     const email = event.target.email.value;
     const password = event.target.password.value;
 
-    const res = await fetch("/api/auth/register", {
+    const res = await fetch("/api/users/register", {
       method: "POST",
       body: JSON.stringify({ firstName, lastName, username, email, password }),
     });
@@ -35,7 +35,9 @@ export const Register = () => {
           <Input name="username" placeholder="Username" />
           <Input name="email" placeholder="Email" />
           <Input name="password" placeholder="Password" type="password" />
-          <Button type="submit">Login</Button>
+          <Button color="primary" type="submit" className="w-full">
+            Register
+          </Button>
         </div>
       </form>
     </div>
