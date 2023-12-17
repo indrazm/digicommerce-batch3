@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import prisma from "@/utils/prisma";
 import { uploadFile } from "@/lib/uploadFile";
 import slugify from "slugify";
+import { verify } from "jsonwebtoken";
+import { cookies } from "next/headers";
 
 export async function GET() {
   try {
@@ -29,7 +31,12 @@ export async function POST(request) {
   const featuredImage = formData.get("featuredImage");
   const images = formData.getAll("images");
   const category = formData.get("category");
-  const userId = formData.get("userId");
+
+  // Get user id from token
+  const cookieStore = cookies();
+  const token = cookieStore.get("token").value;
+  const decoded = verify(token, process.env.JWT_SECRET);
+  const userId = decoded.id;
 
   let productId = "";
 
@@ -84,7 +91,10 @@ export async function POST(request) {
     console.log(error);
   }
 
-  return NextResponse.json({
-    message: "Product created successfully",
-  });
+  return NextResponse.json(
+    {
+      message: "Product created successfully",
+    },
+    { status: 201 }
+  );
 }
