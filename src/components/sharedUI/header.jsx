@@ -1,7 +1,8 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { Switch } from "@nextui-org/react";
+import { Button, Switch } from "@nextui-org/react";
+import Link from "next/link";
 export const Header = () => {
   const { theme, setTheme } = useTheme();
 
@@ -14,9 +15,16 @@ export const Header = () => {
   }
 
   return (
-    <header className="flex justify-between">
-      <div>Digicommerce</div>
-      <Switch onChange={(e) => setThemeMode(e.target.checked)} />
+    <header className="flex justify-between items-center">
+      <Link href="/">
+        <div className="font-bold tracking-tight">Digicommerce</div>
+      </Link>
+      <div className="flex gap-4 items-center">
+        <div>Featured</div>
+        <div>Most downloaded</div>
+        <Button>Join as Creator</Button>
+        <Switch size="sm" onChange={(e) => setThemeMode(e.target.checked)} />
+      </div>
     </header>
   );
 };
