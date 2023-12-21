@@ -8,10 +8,40 @@ import { cookies } from "next/headers";
 export async function GET(request) {
   const searchParams = request.nextUrl.searchParams;
   const slug = searchParams.get("slug");
+  const query = searchParams.get("q");
 
   let products = null;
 
   try {
+    if (query) {
+      products = await prisma.product.findMany({
+        where: {
+          OR: [
+            {
+              name: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+            {
+              description: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+          ],
+        },
+        include: {
+          user: {
+            select: {
+              username: true,
+            },
+          },
+        },
+      });
+      return NextResponse.json({ data: products, message: "All Products fetched successfully" });
+    }
+
     if (slug) {
       const product = await prisma.product.findUnique({
         where: {
